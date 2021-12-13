@@ -1,11 +1,4 @@
-# This is a sample Python script.
-import pandas as pd
-import requests
-# input ticker
 
-# function to get expiration dates
-
-# function to get options data for Ticker + Expiration Date
 
 import requests
 
