@@ -46,7 +46,7 @@ d=re.findall('contractSymbol"(.*?)"bid',resp)
 
 #Cut Data (only all strikes)
 del d[0]
-
+print('lala')
 #print(d[3][0:25])
 
 
