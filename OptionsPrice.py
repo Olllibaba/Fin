@@ -7,7 +7,7 @@ import pandas as pd
 
 
 #Get data(called resp) from Yahoo
-url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
+#url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
 url="https://finance.yahoo.com/quote/AAPL/options?p=AAPL&date=1705622400"
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
 resp = requests.get(url, headers=headers, timeout=5).text
@@ -50,6 +50,7 @@ A[:,0] = np.float_(CoP)
 strikes= [d[x][end[x]-8:end[x]] for x in range(len(d))]
 A[:,1] = np.float_(strikes)/1000
 
+
 # C3: Last Price
 end = [x.find('"lastPrice":{"raw":') for x in d]
 Price = [d[x][end[x]+19:end[x]+26] for x in range(len(d))]
@@ -86,6 +87,9 @@ Vol = [d[x][end[x]+16:end[x]+23] for x in range(len(d))]
 Vol = [re.sub("[^0-9.]", "",Vol[x]) for x in range(len(d))]
 A[:,7] = np.float_(Vol)
 
+#Cut Data (only all strikes)
+
+
 #C9: IV
 end = [x.find('"impliedVolatility":{"raw":') for x in d]
 IV = [d[x][end[x]+27:end[x]+35] for x in range(len(d))]
@@ -96,7 +100,7 @@ A[:,8] = np.float_(IV)
 
 print(A)
 
-a
+
 
 
 
