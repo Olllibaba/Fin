@@ -99,7 +99,7 @@ A[:,8] = np.float_(IV)
 #End
 
 print(A)
-
+a
 
 
 
