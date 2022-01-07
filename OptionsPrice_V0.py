@@ -7,8 +7,10 @@ import pandas as pd
 
 
 #Get data(called resp) from Yahoo
-url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
+#url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
 url="https://finance.yahoo.com/quote/AAPL/options?p=AAPL&date=1705622400"
+
+
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
 resp = requests.get(url, headers=headers, timeout=5).text
 
