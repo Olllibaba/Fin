@@ -6,12 +6,6 @@ import re
 import pandas as pd
 
 
-#Get data(called resp) from Yahoo
-url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
-#url="https://finance.yahoo.com/quote/AAPL/options?p=AAPL&date=1705622400"
-#ticker='AAPL'
-
-
 
 #Define Function that takes Ticker Symbol and returns a List of URLs
 def TickUrl(ticker):
@@ -33,11 +27,12 @@ def TickUrl(ticker):
 
     return urls
 
-#Define function that takes URL and returns time stamps, STILL AS STRING, CONVERT TO GOOD DATE
+#Define function that takes URL and returns Expiration date as a 10-digit number, STILL AS STRING, CONVERT TO GOOD DATE
 def expDate(url):
     return [url[x][-10:] for x in range(len(url))]
 
 #Define Function that takes Yahoo Finance URL and returns Options Data as Matrix
+#Colums: C1:Call(+1)/Put(-1) C2:Strike C3:LastPrice C4:Change C5:Bid C6:Ask C7:OpenInterest C8:Volume C9:IV
 def OptData(url):
 #You need to pretend to be a user unless Yahoo will block you, not sure how the following lines actually work
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
@@ -103,26 +98,76 @@ def OptData(url):
 
 #End
     return A
-#Colums: C1:Call(+1)/Put(-1) C2:Strike C3:LastPrice C4:Change C5:Bid C6:Ask C7:OpenInterest C8:Volume C9:IV
+
+#Define FUnction that takes OptData and a hypothetical Strike Price and returns the Payout in Billions
+def Payout(StockPrice,data):
+    Payout = [100 * (StockPrice - data[n, 1]) * data[n, 0] * data[n, 6] for n in range(len(data))]
+    Payout = [Payout[n] if Payout[n] >= 0 else 0 for n in range(len(Payout))]
+    Payout = np.sum(Payout)
+    return Payout/1000000
+
+#Define Function that takes predicts the Payout given the Extracted Options Data
+#def PricePredict(price,data):
+#    Pay= [Payout(x,data) for x in price]
+#    PredPrice = price[Pay.index(min(Pay))]
+#    return PredPrice
+
+
+
+
+data=OptData('https://finance.yahoo.com/quote/NVDA/options?p=NVDA&date=1674172800')
+price=range(100,2110,5)
+#print(PricePredict(price,data))
+
+
+price = data[len(data[0]-1), 1]
+print(len(data[0]))
+#print(price)
+price=range(20,310,1)
+Pay= [Payout(x,data) for x in price]
+PredPrice = price[Pay.index(min(Pay))]
+print(PredPrice)
+#Pay= [Payout(x,data) for x in price]
+#PredPrice = price[Pay.index(min(Pay))]
+
+#Pay= [Payout(x,data) for x in price]
+#Pred= price[Pay.index(min(Pay))]
+#print(Pred)
+
+#price=range(1000,1200,5)
+#print(PricePredict(price,data))
+
+#print(min(Pay))
+#print(Pay)
 
 
 
 
 
-ticker='SPY'
-urls=TickUrl(ticker)
-Data=[OptData(urls[k]) for k in [0, len(urls)-1]]
+
+#print(dat)
+#print(len(data))
+#Payout for one contract for stockprice price x is P(x) = (x-dat[n,1])*dat[n,0]
+# Total Payout = 100*P(x)*OpenInterest
+#x=1000 # Stock Price
+#Payout = [100*(x-data[n,1])*data[n,0]*data[n,6] for n in range(len(data))]
+#Payout = [Payout[n] if Payout[n]>=0 else 0 for n in range(len(Payout))]
+#print(Payout)
+#Payout = np.sum(Payout)
+#print(Payout/1000000) #in billions
+
+
+# Minimize Total Payout as a function of x
+
+# If you want get data for several strikes you have to do this, not really sure why
+#ticker='lmt'
+#urls=TickUrl(ticker)
+#Data=[OptData(urls[k]) for k in [0, len(urls)-1]]
 #print(Data)
 #print(urls)
-#print(expDate(urls))
+#print(expDate(TickUrl(ticker)))
 
 
-#time=urls[len]
-#time = [urls[x][-10:] for x in range(len(urls))]
-#print(time)
-#a=urls[1]
-#print(a[len(a)-10:len(a)])
-#=[urls[end-10:10]]
 
 
 
