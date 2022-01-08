@@ -3,12 +3,12 @@
 import requests
 import numpy as np
 import re
-import pandas as pd
+
 
 
 #Get data(called resp) from Yahoo
 #url="https://finance.yahoo.com/quote/TSLA/options?p=TSLA&date=1705622400"
-url="https://finance.yahoo.com/quote/AAPL/options?p=AAPL&date=1705622400"
+url='https://finance.yahoo.com/quote/AAPL/options?date=1642723200'
 
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
@@ -80,7 +80,10 @@ A[:,5] = np.float_(Ask)
 end = [x.find('"openInterest":{"raw":') for x in d]
 OI = [d[x][end[x]+22:end[x]+30] for x in range(len(d))]
 OI = [re.sub("[^0-9.]", "",OI[x]) for x in range(len(d))]
+OI = [OI[x] if len(OI[x])>0 else '0' for x in range(len(d))]
 A[:,6] = np.float_(OI)
+
+
 
 #C8:Volume
 end = [x.find('"volume":{"raw":') for x in d]
@@ -96,7 +99,7 @@ A[:,8] = np.float_(IV)
 
 #End
 
-print(A)
+#print(A)
 
 
 
